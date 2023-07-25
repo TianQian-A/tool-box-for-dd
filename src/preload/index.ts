@@ -3,7 +3,7 @@ import { electronAPI } from '@electron-toolkit/preload'
 
 // Custom APIs for renderer
 const api = {
-  // get
+  'dialog:openFolder': () => electronAPI.ipcRenderer.invoke('dialog:openFolder')
 }
 
 // Use `contextBridge` APIs to expose Electron APIs to

@@ -1,6 +1,9 @@
 <script setup lang="ts">
 const handleClick = () => {
   // window.electron.ipcRenderer.send()
+  window.api['dialog:openFolder']().then((res) => {
+    console.log('！！！', res)
+  })
 }
 </script>
 <template>

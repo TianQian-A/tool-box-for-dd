@@ -2,8 +2,8 @@ import { contextBridge } from 'electron'
 import { electronAPI } from '@electron-toolkit/preload'
 
 // Custom APIs for renderer
-const api = {
-  'dialog:openFolder': () => electronAPI.ipcRenderer.invoke('dialog:openFolder')
+const api: Api = {
+  'dialog:openFolder': (_path) => electronAPI.ipcRenderer.invoke('dialog:openFolder', _path)
 }
 
 // Use `contextBridge` APIs to expose Electron APIs to

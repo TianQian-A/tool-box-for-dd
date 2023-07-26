@@ -3,20 +3,19 @@ import { Dirent } from 'fs'
 import { readdir } from 'fs/promises'
 import path from 'path'
 
-interface DirItem {
-  path: string
-  name: string
-  ext: string
-  children: DirItem[]
-}
-
 const addOpenFolder = (win: BrowserWindow) => {
-  ipcMain.handle('dialog:openFolder', async () => {
+  ipcMain.handle('dialog:openFolder', async function (e, _path?: string): ReturnType<
+    Api['dialog:openFolder']
+  > {
     const res = dialog.showOpenDialogSync(win, {
       properties: ['openDirectory']
     })
     if (!res) throw Error('cancel')
-    return await readDir(res[0])
+    const dirArr = await readDir(res[0])
+    return {
+      dirArr,
+      rootPath: res[0]
+    }
   })
 }
 
@@ -40,7 +39,7 @@ const formatDirent = (_path: string, dirent: Dirent) => {
   return {
     name: dirent.name,
     children: [] as DirItem[],
-    path: _path,
+    path: path.join(_path, dirent.name),
     ext: path.extname(dirent.name),
     isDir: dirent.isDirectory()
   }

@@ -3,8 +3,6 @@ import { ElectronAPI } from '@electron-toolkit/preload'
 declare global {
   interface Window {
     electron: ElectronAPI
-    api: {
-      'dialog:openFolder': () => Promise<unknown>
-    }
+    api: Api
   }
 }

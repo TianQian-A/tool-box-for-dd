@@ -7,14 +7,17 @@ const addOpenFolder = (win: BrowserWindow) => {
   ipcMain.handle('dialog:openFolder', async function (e, _path?: string): ReturnType<
     Api['dialog:openFolder']
   > {
-    const res = dialog.showOpenDialogSync(win, {
-      properties: ['openDirectory']
-    })
-    if (!res) throw Error('cancel')
-    const dirArr = await readDir(res[0])
+    if (!_path) {
+      const res = dialog.showOpenDialogSync(win, {
+        properties: ['openDirectory']
+      })
+      if (!res) throw 'cancel'
+      _path = res[0]
+    }
+    const dirArr = await readDir(_path)
     return {
       dirArr,
-      rootPath: res[0]
+      rootPath: _path
     }
   })
 }

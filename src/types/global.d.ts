@@ -3,6 +3,7 @@ import { Stats } from 'fs'
 
 declare global {
   interface DirItem {
+    id: string
     name: string
     children: DirItem[]
     path: string

@@ -2,7 +2,7 @@
 const isDark = useDark()
 </script>
 <template>
-  <NSwitch v-model:value="isDark">
+  <NSwitch v-model:value="isDark" size="small">
     <template #checked-icon>
       <NIcon>
         <IUilMoon></IUilMoon>

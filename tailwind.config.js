@@ -1,6 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 const plugin = require('tailwindcss/plugin')
 module.exports = {
+  darkMode: 'class',
   content: ['./src/renderer/index.html', './src/**/*.{vue,js,ts,jsx,tsx}'],
   theme: {
     extend: {}

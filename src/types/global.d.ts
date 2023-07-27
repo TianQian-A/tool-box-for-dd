@@ -1,4 +1,5 @@
 import { BrowserWindow } from 'electron'
+import { Stats } from 'fs'
 
 declare global {
   interface DirItem {
@@ -7,9 +8,11 @@ declare global {
     path: string
     ext: string
     isDir: boolean
+    stat: Stats
   }
   interface Api {
-    'dialog:openFolder': (path?: string) => Promise<{ dirArr: DirItem[]; rootPath: string }>
+    'folder:openDialog': () => Promise<{ dirArr: DirItem[]; rootPath: string }>
+    'folder:readDir': (path: string) => Promise<{ dirArr: DirItem[]; rootPath: string }>
     'sys:close': () => void
     'sys:hide': () => void
     'sys:minimize': () => void

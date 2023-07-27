@@ -3,7 +3,11 @@ import { electronAPI } from '@electron-toolkit/preload'
 
 // Custom APIs for renderer
 const api: Api = {
-  'dialog:openFolder': (_path) => electronAPI.ipcRenderer.invoke('dialog:openFolder', _path)
+  'dialog:openFolder': (_path) => electronAPI.ipcRenderer.invoke('dialog:openFolder', _path),
+  'sys:close': () => electronAPI.ipcRenderer.send('sys:close'),
+  'sys:hide': () => electronAPI.ipcRenderer.send('sys:hide'),
+  'sys:minimize': () => electronAPI.ipcRenderer.send('sys:minimize'),
+  'sys:maximize': () => electronAPI.ipcRenderer.send('sys:maximize')
 }
 
 // Use `contextBridge` APIs to expose Electron APIs to

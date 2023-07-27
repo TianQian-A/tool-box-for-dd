@@ -2,7 +2,7 @@ import { app, shell, BrowserWindow } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
-import { initDialog } from './dialog'
+import { initDialog, initSys, initTray } from './modules'
 
 function createWindow(): BrowserWindow {
   // Create the browser window.
@@ -75,4 +75,6 @@ app.on('window-all-closed', () => {
 // code. You can also put them in separate files and require them here.
 const addEvents = (win: BrowserWindow) => {
   initDialog(win)
+  initSys(win)
+  initTray(win)
 }

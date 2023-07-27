@@ -249,6 +249,7 @@ declare global {
   const useStorage: typeof import('@vueuse/core')['useStorage']
   const useStorageAsync: typeof import('@vueuse/core')['useStorageAsync']
   const useStoreBase: typeof import('./src/pinia/base')['useStoreBase']
+  const useStoreSettings: typeof import('./src/pinia/settings')['useStoreSettings']
   const useStyleTag: typeof import('@vueuse/core')['useStyleTag']
   const useSupported: typeof import('@vueuse/core')['useSupported']
   const useSwipe: typeof import('@vueuse/core')['useSwipe']

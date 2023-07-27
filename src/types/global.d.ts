@@ -10,6 +10,10 @@ declare global {
   }
   interface Api {
     'dialog:openFolder': (path?: string) => Promise<{ dirArr: DirItem[]; rootPath: string }>
+    'sys:close': () => void
+    'sys:hide': () => void
+    'sys:minimize': () => void
+    'sys:maximize': () => void
   }
 }
 export {}

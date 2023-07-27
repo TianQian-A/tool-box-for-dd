@@ -32,6 +32,7 @@ declare module 'vue' {
     NLayoutSider: typeof import('naive-ui')['NLayoutSider']
     NMenu: typeof import('naive-ui')['NMenu']
     NMessageProvider: typeof import('naive-ui')['NMessageProvider']
+    NR: typeof import('naive-ui')['NR']
     NSwitch: typeof import('naive-ui')['NSwitch']
     PageHome: typeof import('./src/components/PageHome.vue')['default']
     PageTwo: typeof import('./src/components/PageTwo.vue')['default']

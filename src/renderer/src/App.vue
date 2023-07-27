@@ -1,12 +1,14 @@
 <script setup lang="ts">
-import { darkTheme } from 'naive-ui'
+import { NDialogProvider, darkTheme } from 'naive-ui'
 const isDark = useDark()
 const theme = computed(() => (isDark.value ? darkTheme : null))
 </script>
 <template>
   <NConfigProvider :theme="theme">
     <NMessageProvider>
-      <RouterView></RouterView>
+      <NDialogProvider>
+        <RouterView></RouterView>
+      </NDialogProvider>
     </NMessageProvider>
   </NConfigProvider>
 </template>

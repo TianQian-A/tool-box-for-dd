@@ -1,17 +1,71 @@
 <script setup lang="tsx">
 import dayjs from 'dayjs'
-import { DataTableColumns, NIcon } from 'naive-ui'
+import { DataTableColumns, NDivider, NEllipsis, NIcon, NTooltip } from 'naive-ui'
 import FluentEmojiFlatOpenFileFolder from '~icons/fluent-emoji-flat/open-file-folder'
 import FluentEmojiFlatPageWithCurl from '~icons/fluent-emoji-flat/page-with-curl'
 
+const message = useMessage()
+const baseStore = useStoreBase()
+
 const rootPath = ref('')
 const fileArr = ref<DirItem[]>([])
+const folderLoading = ref(false)
+const toggleFolderLoading = useToggle(folderLoading)
+const autoCategoryEnable = ref(false)
+/**
+ * 打开文件对话框
+ */
 const openFolderDialog = () => {
-  window.api['folder:openDialog']().then((res) => {
-    rootPath.value = res.rootPath
-    fileArr.value = res.dirArr
-  })
+  toggleFolderLoading(true)
+  window.api['folder:openDialog']()
+    .then((res) => {
+      rootPath.value = res.rootPath
+      fileArr.value = res.dirArr
+      baseStore.addOpenedRootPath(res.rootPath)
+    })
+    .catch((err) => {
+      if (!err.message.includes('cancel')) {
+        message.error(err.message)
+      }
+    })
+    .finally(() => {
+      toggleFolderLoading(false)
+    })
 }
+/**
+ * 前往目录
+ * @param path 目录地址
+ */
+const toFolder = (path: string) => {
+  toggleFolderLoading(true)
+  window.api['folder:readDir'](path)
+    .then((res) => {
+      rootPath.value = res.rootPath
+      fileArr.value = res.dirArr
+    })
+    .catch((err) => {
+      message.error(err.message)
+    })
+    .finally(() => {
+      toggleFolderLoading(false)
+    })
+}
+/**
+ * 目录面包屑导航
+ */
+const rootPathBreadCrumb = computed(() => {
+  let tempRootPath = ''
+  return rootPath.value
+    .split('\\')
+    .filter(Boolean)
+    .map((item) => {
+      tempRootPath += `${item}\\`
+      return {
+        name: item,
+        path: tempRootPath
+      }
+    })
+})
 
 const rowKey = (row: DirItem) => row.id
 const rowProps = (row: DirItem) => {
@@ -19,10 +73,7 @@ const rowProps = (row: DirItem) => {
     style: 'cursor: pointer;',
     onClick: async () => {
       if (!row.isDir) return
-      window.api['folder:readDir'](row.path).then((res) => {
-        rootPath.value = res.rootPath
-        fileArr.value = res.dirArr
-      })
+      toFolder(row.path)
     }
   }
 }
@@ -37,9 +88,7 @@ const columns: DataTableColumns<DirItem> = [
     key: 'name',
     title: '文件名',
     resizable: true,
-    ellipsis: {
-      tooltip: true
-    },
+    minWidth: 200,
     render(rowData) {
       return (
         <div class="flex items-center text-sm">
@@ -50,7 +99,7 @@ const columns: DataTableColumns<DirItem> = [
               <FluentEmojiFlatPageWithCurl></FluentEmojiFlatPageWithCurl>
             )}
           </NIcon>
-          <span class="ml-2">{rowData.name}</span>
+          <NEllipsis class="max-w-xs">{rowData.name}</NEllipsis>
         </div>
       )
     }
@@ -72,42 +121,77 @@ const columns: DataTableColumns<DirItem> = [
 ]
 </script>
 <template>
-  <div class="w-full h-full flex-col">
+  <div class="w-full h-full flex-col flex">
     <template v-if="!rootPath">
-      <div class="w-full h-full flex-center">
+      <div class="w-full h-full flex-center flex-col space-y-2">
         <NButton type="primary" @click="openFolderDialog">选择工作目录</NButton>
+        <NList hoverable clickable>
+          <NListItem
+            v-for="path in baseStore.openedRootPaths"
+            :key="path"
+            @click="toFolder(path)"
+            >{{ path }}</NListItem
+          >
+        </NList>
       </div>
     </template>
     <template v-else>
-      <div class="flex flex-col">
-        <div class="operate-box mb-2">
-          <div class="space-x-2">
-            <NButton circle>
+      <div class="flex items-center space-x-2">
+        <NTooltip trigger="hover" :show-arrow="false">
+          <template #trigger>
+            <NButton
+              circle
+              tertiary
+              :secondary="autoCategoryEnable"
+              type="info"
+              @click="autoCategoryEnable = !autoCategoryEnable"
+            >
               <template #icon>
-                <IUilAngleLeftB></IUilAngleLeftB>
+                <IUilIcons></IUilIcons>
               </template>
             </NButton>
-            <NButton circle>
+          </template>
+          快速分类
+        </NTooltip>
+        <NDivider vertical></NDivider>
+        <NTooltip trigger="hover" :show-arrow="false">
+          <template #trigger>
+            <NButton circle tertiary type="warning" @click="openFolderDialog">
               <template #icon>
-                <IUilAngleRightB></IUilAngleRightB>
+                <IUilBringBottom></IUilBringBottom>
               </template>
             </NButton>
-            <NButton circle secondary type="primary" class="text-green-200">
+          </template>
+          重新选择目录
+        </NTooltip>
+        <NTooltip trigger="hover" :show-arrow="false">
+          <template #trigger>
+            <NButton circle tertiary type="primary" @click="toFolder(rootPath)">
               <template #icon>
                 <IUilRefresh></IUilRefresh>
               </template>
             </NButton>
-          </div>
-        </div>
-        <NDataTable
-          :data="fileArr"
-          :columns="columns"
-          :row-key="rowKey"
-          :row-props="rowProps"
-          min-height="60vh"
-          max-height="60vh"
-        ></NDataTable>
+          </template>
+          刷新目录
+        </NTooltip>
       </div>
+      <NBreadcrumb separator=">" class="my-2">
+        <NBreadcrumbItem
+          v-for="item in rootPathBreadCrumb"
+          :key="item.path"
+          @click="toFolder(item.path)"
+          >{{ item.name }}</NBreadcrumbItem
+        >
+      </NBreadcrumb>
+      <NDataTable
+        class="flex-1"
+        flex-height
+        :data="fileArr"
+        :columns="columns"
+        :row-key="rowKey"
+        :row-props="rowProps"
+        :loading="folderLoading"
+      ></NDataTable>
     </template>
   </div>
 </template>

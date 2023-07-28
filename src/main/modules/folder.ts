@@ -1,6 +1,6 @@
 import { BrowserWindow, ipcMain, dialog } from 'electron'
 import { Dirent } from 'fs'
-import { readdir, stat } from 'fs/promises'
+import { access, readdir, stat } from 'fs/promises'
 import path from 'path'
 import crypto from 'crypto'
 
@@ -36,9 +36,14 @@ const readDir = async (_path: string) => {
     withFileTypes: true
   })
   for (const dirent of direntArr) {
-    if (dirent.name === 'desktop.ini') continue
-    const formattedItem = await formatDirent(_path, dirent)
-    res.push(formattedItem)
+    try {
+      await access(path.join(_path, dirent.name))
+      if (dirent.name === 'desktop.ini') continue
+      const formattedItem = await formatDirent(_path, dirent)
+      res.push(formattedItem)
+    } catch (err) {
+      console.error(err)
+    }
   }
   return res
 }

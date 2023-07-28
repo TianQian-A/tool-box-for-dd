@@ -5,7 +5,6 @@ export const useStoreBase = defineStore(
   'base',
   () => {
     const settingStore = useStoreSettings()
-    const suffixList = ref(['seq'])
     const openedRootPaths = ref<string[]>([])
 
     const addOpenedRootPath = (_path: string) => {
@@ -21,7 +20,6 @@ export const useStoreBase = defineStore(
     }
 
     return {
-      suffixList,
       openedRootPaths,
       addOpenedRootPath
     }

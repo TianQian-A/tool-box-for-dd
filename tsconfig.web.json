@@ -6,7 +6,7 @@
     "src/renderer/src/**/*.vue",
     "src/renderer/*.d.ts",
     "src/preload/*.d.ts",
-    "src/types/global.d.ts"
+    "src/types/*"
   ],
   "compilerOptions": {
     "composite": true,
@@ -15,6 +15,9 @@
     "paths": {
       "@renderer/*": [
         "src/renderer/src/*"
+      ],
+      "@globalType/*": [
+        "src/types/*"
       ]
     }
   }

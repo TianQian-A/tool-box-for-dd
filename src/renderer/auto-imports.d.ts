@@ -248,6 +248,7 @@ declare global {
   const useStepper: typeof import('@vueuse/core')['useStepper']
   const useStorage: typeof import('@vueuse/core')['useStorage']
   const useStorageAsync: typeof import('@vueuse/core')['useStorageAsync']
+  const useStoreAutoCategory: typeof import('./src/pinia/toolAutoCategory')['useStoreAutoCategory']
   const useStoreBase: typeof import('./src/pinia/base')['useStoreBase']
   const useStoreSettings: typeof import('./src/pinia/settings')['useStoreSettings']
   const useStyleTag: typeof import('@vueuse/core')['useStyleTag']

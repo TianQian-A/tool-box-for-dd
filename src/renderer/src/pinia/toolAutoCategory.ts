@@ -3,12 +3,24 @@ import { SaveRuleEnum } from '@globalType/globalEnums'
 export const useStoreAutoCategory = defineStore(
   'auto-category',
   () => {
-    const matchRules = ref([
-      { ext: 'seq', suffix: '-K', folderName: 'k' },
-      { ext: 'seq', suffix: '-H', folderName: 'h' },
-      { ext: 'seq', suffix: '_K', folderName: 'k' },
-      { ext: 'seq', suffix: '_H', folderName: 'h' }
+    /**
+     * 遍历的深度
+     */
+    const matchDepth = ref(3)
+    /**
+     * 是否忽略大小写
+     */
+    const ignoreCase = ref(false)
+    /**
+     * 匹配的规则
+     */
+    const matchRules = ref<ToolAutoCategoryMatchItem[]>([
+      { rule: '(-h|_h)\\.seq', folderName: 'k' },
+      { rule: '(-k|_k)\\.seq', folderName: 'h' }
     ])
+    /**
+     * 保存的规则
+     */
     const saveRules = ref([
       {
         value: SaveRuleEnum.ROOT,
@@ -23,9 +35,17 @@ export const useStoreAutoCategory = defineStore(
         label: '手动指定文件夹'
       }
     ])
+    /**
+     * 当前所选择的保存的规则
+     */
     const saveRuleId = ref(SaveRuleEnum.ROOT)
+    /**
+     * 自定义的保存路径
+     */
     const saveManualPath = ref('')
     return {
+      ignoreCase,
+      matchDepth,
       matchRules,
       saveRules,
       saveRuleId,

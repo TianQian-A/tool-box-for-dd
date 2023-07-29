@@ -3,7 +3,6 @@ import WindowExplorer from './WindowExplorer.vue'
 
 const autoCategoryEnable = ref(false)
 const toolEnable = computed(() => autoCategoryEnable.value)
-const explorer = ref<InstanceType<typeof WindowExplorer>>()
 </script>
 <template>
   <div class="w-full h-full flex-col flex">

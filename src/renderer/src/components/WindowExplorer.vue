@@ -6,6 +6,7 @@ import FluentEmojiFlatPageWithCurl from '~icons/fluent-emoji-flat/page-with-curl
 
 const message = useMessage()
 const baseStore = useStoreBase()
+const explorerStore = useStoreExplorer()
 
 const rootPath = ref('')
 const fileArr = ref<DirItem[]>([])
@@ -66,12 +67,15 @@ const rootPathBreadCrumb = computed(() => {
     })
 })
 
-const rowKey = (row: DirItem) => row.id
+const rowKey = (row: DirItem) => row.path
 const rowProps = (row: DirItem) => {
   return {
     style: 'cursor: pointer;',
-    onClick: async () => {
-      if (!row.isDir) return
+    onClick: async (e: Event) => {
+      const isSelection = Array.from((e.target as HTMLDivElement).classList).some(
+        (item) => item === 'n-data-table-td--selection' || item === 'n-checkbox-box__border'
+      )
+      if (isSelection || !row.isDir) return
       toFolder(row.path)
     }
   }
@@ -150,13 +154,14 @@ const columns: DataTableColumns<DirItem> = [
         >
       </NBreadcrumb>
       <NDataTable
-        class="flex-1"
+        v-model:checked-row-keys="explorerStore.checkedPaths"
         flex-height
         :data="fileArr"
         :columns="columns"
         :row-key="rowKey"
         :row-props="rowProps"
         :loading="folderLoading"
+        class="flex-1"
       ></NDataTable>
     </div>
   </template>

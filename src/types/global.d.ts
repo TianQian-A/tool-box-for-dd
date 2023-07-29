@@ -19,5 +19,9 @@ declare global {
     'sys:minimize': () => void
     'sys:maximize': () => void
   }
+  interface ToolAutoCategoryMatchItem {
+    rule: string
+    folderName: string
+  }
 }
 export {}

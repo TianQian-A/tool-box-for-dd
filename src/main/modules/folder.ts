@@ -1,8 +1,9 @@
-import { BrowserWindow, ipcMain, dialog } from 'electron'
+import { BrowserWindow, ipcMain, dialog, shell } from 'electron'
 import { Dirent } from 'fs'
 import { access, readdir, stat } from 'fs/promises'
 import path from 'path'
 import crypto from 'crypto'
+import { exec } from 'child_process'
 
 const addFolderDialog = (win: BrowserWindow) => {
   ipcMain.handle('folder:openDialog', async function (e): ReturnType<Api['folder:openDialog']> {
@@ -27,6 +28,12 @@ const addRedFolder = (win: BrowserWindow) => {
       dirArr,
       rootPath: _path
     }
+  })
+}
+
+const addOpenFolder = (win: BrowserWindow) => {
+  ipcMain.on('folder:open', (e, _path: string) => {
+    shell.openPath(_path)
   })
 }
 
@@ -64,4 +71,5 @@ const formatDirent = async (_path: string, dirent: Dirent) => {
 export const initFolderDialog = (win: BrowserWindow) => {
   addFolderDialog(win)
   addRedFolder(win)
+  addOpenFolder(win)
 }

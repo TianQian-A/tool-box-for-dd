@@ -5,6 +5,7 @@ import { electronAPI } from '@electron-toolkit/preload'
 const api: Api = {
   'folder:openDialog': () => electronAPI.ipcRenderer.invoke('folder:openDialog'),
   'folder:readDir': (_path) => electronAPI.ipcRenderer.invoke('folder:readDir', _path),
+  'folder:open': (_path) => electronAPI.ipcRenderer.send('folder:open', _path),
   'sys:close': () => electronAPI.ipcRenderer.send('sys:close'),
   'sys:hide': () => electronAPI.ipcRenderer.send('sys:hide'),
   'sys:minimize': () => electronAPI.ipcRenderer.send('sys:minimize'),

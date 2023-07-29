@@ -13,6 +13,7 @@ const toolEnable = computed(() => autoCategoryEnable.value)
             <template #trigger>
               <NButton
                 circle
+                size="small"
                 :tertiary="!autoCategoryEnable"
                 type="info"
                 @click="autoCategoryEnable = !autoCategoryEnable"

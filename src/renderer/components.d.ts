@@ -20,6 +20,7 @@ declare module 'vue' {
     IUilSquareShape: typeof import('~icons/uil/square-shape')['default']
     IUilSun: typeof import('~icons/uil/sun')['default']
     IUilTimes: typeof import('~icons/uil/times')['default']
+    IUilTrash: typeof import('~icons/uil/trash')['default']
     LayoutHeader: typeof import('./src/components/LayoutHeader.vue')['default']
     LayoutMain: typeof import('./src/components/LayoutMain.vue')['default']
     NBreadcrumb: typeof import('naive-ui')['NBreadcrumb']

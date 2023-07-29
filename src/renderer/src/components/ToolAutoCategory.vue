@@ -27,13 +27,39 @@ const rules: FormRules = {
     validator() {
       return false
     }
+  },
+  folderPath: {
+    validator() {
+      if (!explorerStore.checkedPaths.length) return new Error('选择工作的目录~')
+      return true
+    }
   }
 }
+/**
+ * 点击已选择的工作目录
+ * @param path 目录地址
+ */
+const handleClickPath = (path: string) => {
+  window.api['folder:open'](path)
+}
+/**
+ * 删除已选择的目录地址
+ * @param path 目录地址
+ */
+const handleDelPath = (path: string) => {
+  explorerStore.checkedPaths = explorerStore.checkedPaths.filter((item) => item !== path)
+}
+/**
+ * 调用系统资源管理器选择保存文件的目录
+ */
 const chooseSavePath = () => {
   window.api['folder:openDialog']().then((res) => {
     saveManualPath.value = res.rootPath
   })
 }
+/**
+ * 执行自动分类
+ */
 const handleExec = () => {
   formRef.value?.validate().then(() => {})
 }
@@ -77,12 +103,34 @@ const handleExec = () => {
           </div>
         </NElement>
         <NForm ref="formRef" :disabled="isLocking" :rules="rules" class="mt-4">
-          <NFormItem label="当前工作的目录">
+          <NFormItem label="当前工作的目录" path="folderPath">
             <template v-if="explorerStore.checkedPaths.length">
               <div class="flex flex-col space-y-1 max-w-full">
-                <NGradientText v-for="item in explorerStore.checkedPaths" :key="item" type="error">
-                  <NEllipsis>{{ item }}</NEllipsis>
-                </NGradientText>
+                <div
+                  v-for="item in explorerStore.checkedPaths"
+                  :key="item"
+                  class="flex items-center"
+                >
+                  <NButton
+                    type="error"
+                    circle
+                    size="tiny"
+                    :disabled="isLocking"
+                    @click="handleDelPath(item)"
+                  >
+                    <NIcon size="20">
+                      <IUilTrash></IUilTrash>
+                    </NIcon>
+                  </NButton>
+                  <div
+                    class="hover:bg-red-100 px-1 cursor-pointer flex items-center ml-1"
+                    @click="handleClickPath(item)"
+                  >
+                    <NGradientText type="error">
+                      <NEllipsis>{{ item }}</NEllipsis>
+                    </NGradientText>
+                  </div>
+                </div>
               </div>
             </template>
             <template v-else>
@@ -118,9 +166,9 @@ const handleExec = () => {
                 :label="`规则${index + 1}`"
                 :path="`matchRules[${index}]}`"
                 :rule="{
+                  message: '规则不能为空',
                   validator() {
-                    if (!value.folderName || !value.rule) return new Error('规则不能为空')
-                    return true
+                    return Boolean(value.folderName && value.rule)
                   }
                 }"
               >

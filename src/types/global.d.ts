@@ -14,6 +14,7 @@ declare global {
   interface Api {
     'folder:openDialog': () => Promise<{ dirArr: DirItem[]; rootPath: string }>
     'folder:readDir': (path: string) => Promise<{ dirArr: DirItem[]; rootPath: string }>
+    'folder:open': (path: string) => void
     'sys:close': () => void
     'sys:hide': () => void
     'sys:minimize': () => void

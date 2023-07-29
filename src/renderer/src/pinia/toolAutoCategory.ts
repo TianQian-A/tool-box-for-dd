@@ -27,10 +27,6 @@ export const useStoreAutoCategory = defineStore(
         label: '存放在所执行的文件夹下'
       },
       {
-        value: SaveRuleEnum.PARENT,
-        label: '存放在文件所在的文件夹的位置'
-      },
-      {
         value: SaveRuleEnum.MANUAL,
         label: '手动指定文件夹'
       }

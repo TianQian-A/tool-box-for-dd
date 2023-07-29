@@ -19,6 +19,8 @@ declare global {
     'sys:hide': () => void
     'sys:minimize': () => void
     'sys:maximize': () => void
+    'autoCategory:exec': () => void
+    'autoCategory:cancel': () => void
   }
   interface ToolAutoCategoryMatchItem {
     rule: string

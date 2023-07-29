@@ -2,7 +2,7 @@ import { app, shell, BrowserWindow } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
-import { initFolderDialog, initSys, initTray } from './modules'
+import { initFolderDialog, initSys, initToolAutoCategory, initTray } from './modules'
 
 function createWindow(): BrowserWindow {
   // Create the browser window.
@@ -77,4 +77,5 @@ const addEvents = (win: BrowserWindow) => {
   initFolderDialog(win)
   initSys(win)
   initTray(win)
+  initToolAutoCategory(win)
 }

@@ -3,10 +3,12 @@ import { Dirent } from 'fs'
 import { access, readdir, stat } from 'fs/promises'
 import path from 'path'
 import crypto from 'crypto'
-import { exec } from 'child_process'
+import { APINameEnum } from '../../types/globalEnums'
 
 const addFolderDialog = (win: BrowserWindow) => {
-  ipcMain.handle('folder:openDialog', async function (e): ReturnType<Api['folder:openDialog']> {
+  ipcMain.handle(APINameEnum.FOLDER_OPEN_DIALOG, async function (e): ReturnType<
+    Api['folder:openDialog']
+  > {
     const res = dialog.showOpenDialogSync(win, {
       properties: ['openDirectory']
     })
@@ -20,8 +22,8 @@ const addFolderDialog = (win: BrowserWindow) => {
 }
 
 const addRedFolder = (win: BrowserWindow) => {
-  ipcMain.handle('folder:readDir', async function (e, _path: string): ReturnType<
-    Api['folder:readDir']
+  ipcMain.handle(APINameEnum.FOLDER_READDIR, async function (e, _path: string): ReturnType<
+    Api[APINameEnum.FOLDER_READDIR]
   > {
     const dirArr = await readDir(_path)
     return {
@@ -32,7 +34,7 @@ const addRedFolder = (win: BrowserWindow) => {
 }
 
 const addOpenFolder = (win: BrowserWindow) => {
-  ipcMain.on('folder:open', (e, _path: string) => {
+  ipcMain.on(APINameEnum.FOLDER_OPEN, (e, _path: string) => {
     shell.openPath(_path)
   })
 }

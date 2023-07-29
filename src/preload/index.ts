@@ -1,15 +1,18 @@
 import { contextBridge } from 'electron'
 import { electronAPI } from '@electron-toolkit/preload'
+import { APINameEnum } from '../types/globalEnums'
 
 // Custom APIs for renderer
 const api: Api = {
-  'folder:openDialog': () => electronAPI.ipcRenderer.invoke('folder:openDialog'),
-  'folder:readDir': (_path) => electronAPI.ipcRenderer.invoke('folder:readDir', _path),
-  'folder:open': (_path) => electronAPI.ipcRenderer.send('folder:open', _path),
-  'sys:close': () => electronAPI.ipcRenderer.send('sys:close'),
-  'sys:hide': () => electronAPI.ipcRenderer.send('sys:hide'),
-  'sys:minimize': () => electronAPI.ipcRenderer.send('sys:minimize'),
-  'sys:maximize': () => electronAPI.ipcRenderer.send('sys:maximize')
+  'folder:openDialog': () => electronAPI.ipcRenderer.invoke(APINameEnum.FOLDER_OPEN_DIALOG),
+  'folder:readDir': (_path) => electronAPI.ipcRenderer.invoke(APINameEnum.FOLDER_READDIR, _path),
+  'folder:open': (_path) => electronAPI.ipcRenderer.send(APINameEnum.FOLDER_OPEN, _path),
+  'sys:close': () => electronAPI.ipcRenderer.send(APINameEnum.SYS_CLOSE),
+  'sys:hide': () => electronAPI.ipcRenderer.send(APINameEnum.SYS_HIDE),
+  'sys:minimize': () => electronAPI.ipcRenderer.send(APINameEnum.SYS_MINIMIZE),
+  'sys:maximize': () => electronAPI.ipcRenderer.send(APINameEnum.SYS_MAXIMIZE),
+  'autoCategory:cancel': () => electronAPI.ipcRenderer.send(APINameEnum.AUTO_CATEGORY_CANCEL),
+  'autoCategory:exec': () => electronAPI.ipcRenderer.send(APINameEnum.AUTO_CATEGORY_EXEC)
 }
 
 // Use `contextBridge` APIs to expose Electron APIs to

@@ -1,19 +1,20 @@
-import { App, BrowserWindow, ipcMain } from 'electron'
+import { BrowserWindow, ipcMain } from 'electron'
+import { APINameEnum } from '../../types/globalEnums'
 
 const addSysEvent = (win: BrowserWindow) => {
-  ipcMain.on('sys:close', (e) => {
+  ipcMain.on(APINameEnum.SYS_CLOSE, (e) => {
     e.preventDefault()
     win.close()
   })
-  ipcMain.on('sys:hide', (e) => {
+  ipcMain.on(APINameEnum.SYS_HIDE, (e) => {
     e.preventDefault()
     win.hide()
   })
-  ipcMain.on('sys:minimize', (e) => {
+  ipcMain.on(APINameEnum.SYS_MINIMIZE, (e) => {
     e.preventDefault()
     win.minimize()
   })
-  ipcMain.on('sys:maximize', (e) => {
+  ipcMain.on(APINameEnum.SYS_MAXIMIZE, (e) => {
     e.preventDefault()
     if (win.isMaximized()) {
       win.unmaximize()

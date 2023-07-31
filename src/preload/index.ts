@@ -1,4 +1,4 @@
-import { contextBridge } from 'electron'
+import { contextBridge, ipcRenderer } from 'electron'
 import { electronAPI } from '@electron-toolkit/preload'
 import { APINameEnum } from '../types/globalEnums'
 
@@ -12,7 +12,9 @@ const api: Api = {
   'sys:minimize': () => electronAPI.ipcRenderer.send(APINameEnum.SYS_MINIMIZE),
   'sys:maximize': () => electronAPI.ipcRenderer.send(APINameEnum.SYS_MAXIMIZE),
   'autoCategory:cancel': () => electronAPI.ipcRenderer.send(APINameEnum.AUTO_CATEGORY_CANCEL),
-  'autoCategory:exec': () => electronAPI.ipcRenderer.send(APINameEnum.AUTO_CATEGORY_EXEC)
+  'autoCategory:exec': (params) =>
+    electronAPI.ipcRenderer.invoke(APINameEnum.AUTO_CATEGORY_EXEC, params),
+  'autoCategory:message': (cb) => ipcRenderer.on(APINameEnum.AUTO_CATEGORY_MESSAGE, cb)
 }
 
 // Use `contextBridge` APIs to expose Electron APIs to

@@ -54,7 +54,16 @@ const readDir = async (_path: string) => {
       console.error(err)
     }
   }
+  sortDir(res)
   return res
+}
+
+const sortDir = (dirs: DirItem[]) => {
+  dirs.sort((a, b) => {
+    const dirSort = Number(b.isDir) - Number(a.isDir)
+    if (dirSort !== 0) return dirSort
+    return a.name.localeCompare(b.name)
+  })
 }
 
 const formatDirent = async (_path: string, dirent: Dirent) => {
@@ -75,3 +84,5 @@ export const initFolderDialog = (win: BrowserWindow) => {
   addRedFolder(win)
   addOpenFolder(win)
 }
+
+export { readDir }

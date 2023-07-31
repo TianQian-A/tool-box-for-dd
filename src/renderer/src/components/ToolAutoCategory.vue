@@ -8,6 +8,7 @@ const { matchRules, saveRuleId, saveRules, saveManualPath, ignoreCase, matchDept
 )
 const formRef = ref<FormInst>()
 const isLocking = ref(true)
+const messageVisible = ref(false)
 
 const onCreate = function (): ToolAutoCategoryMatchItem {
   return {
@@ -61,7 +62,17 @@ const chooseSavePath = () => {
  * 执行自动分类
  */
 const handleExec = () => {
-  formRef.value?.validate().then(() => {})
+  formRef.value?.validate().then(() => {
+    const params = {
+      rootPath: explorerStore.checkedPaths[0],
+      saveRuleId: saveRuleId.value,
+      saveManualPath: saveManualPath.value,
+      matchParam: toRaw(matchRules.value[0]),
+      matchDepth: matchDepth.value,
+      ignoreCase: true
+    }
+    messageVisible.value = true
+  })
 }
 </script>
 <template>
@@ -154,7 +165,7 @@ const handleExec = () => {
               :max="10"
             ></NInputNumber>
           </NFormItem>
-          <NFormItem label="忽略大小写">
+          <NFormItem label="忽略文件名大小写">
             <NRadioGroup v-model:value="ignoreCase">
               <NRadioButton :value="true">是</NRadioButton>
               <NRadioButton :value="false">否</NRadioButton>
@@ -204,6 +215,7 @@ const handleExec = () => {
         </NForm>
       </div>
     </NScrollbar>
+    <ToolAutoCategoryMessage v-model:show="messageVisible"></ToolAutoCategoryMessage>
   </NConfigProvider>
 </template>
 <style scoped lang="scss"></style>

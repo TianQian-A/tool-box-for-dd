@@ -165,10 +165,15 @@ class ExecAutoCategory {
     this.saveRuleId = saveRuleId
     this.saveManualPath = saveManualPath
     this.matchDepth = matchDepth
-    this.matchRuleFormatted = matchRules.map((item) => ({
-      ...item,
-      reg: RegExp(`^.*${item.rule}$`, ignoreCase ? 'i' : '')
-    }))
+    try {
+      this.matchRuleFormatted = matchRules.map((item) => ({
+        ...item,
+        reg: RegExp(`^.*${item.rule}$`, ignoreCase ? 'i' : '')
+      }))
+    } catch (err) {
+      this.sendMessage('END', '匹配规则错误', 'error')
+      return
+    }
 
     try {
       for (const _path of rootPaths) {

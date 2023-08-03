@@ -8,7 +8,6 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     IconTheme: typeof import('./src/components/IconTheme.vue')['default']
-    INotoCamping: typeof import('~icons/noto/camping')['default']
     IUilBringBottom: typeof import('~icons/uil/bring-bottom')['default']
     IUilIcons: typeof import('~icons/uil/icons')['default']
     IUilMinus: typeof import('~icons/uil/minus')['default']

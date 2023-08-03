@@ -129,7 +129,7 @@ const columns: DataTableColumns<DirItem> = [
 <template>
   <template v-if="!rootPath">
     <div class="w-full h-full flex-center flex-col space-y-10">
-      <img src="../assets//imgs/128.png" alt="" />
+      <img src="../assets/imgs/128.png" alt="" />
       <NButton type="primary" @click="openFolderDialog">选择工作目录</NButton>
       <NList hoverable clickable>
         <NListItem v-for="path in baseStore.openedRootPaths" :key="path" @click="toFolder(path)">{{
